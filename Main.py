@@ -50,28 +50,36 @@ def increase_contrast_histogram(image):
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     return cv2.equalizeHist(gray_image)
 
-image = cv2.imread('images.jpg')
+def identify_image(image):
+    image = cv2.imread(image)
+    new_size = (800, 600)
 
-alpha = 1.5 
-beta = 0
 
-image = cv2.convertScaleAbs(image, alpha=alpha, beta=beta)
+    seed = (100, 100) 
 
-seed = (100, 100) 
+    alpha = 1.5 
+    beta = 0
 
-image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) 
-segmented_image = region_growing(image_gray, seed)
+    image = cv2.resize(image, new_size)
+    image = cv2.convertScaleAbs(image, alpha=alpha, beta=beta)
+    image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) 
 
-image_no_noise = noise_removal(segmented_image)
+    segmented_image = region_growing(image_gray, seed)
 
-image_thickned = thick_font(image_no_noise)
+    image_no_noise = noise_removal(segmented_image)
 
-cv2.imshow('Imagem Original', image)
-cv2.imshow('Imagem Afinada', image_thickned)
+    image_thickned = thick_font(image_no_noise)
 
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+    cv2.imshow('Imagem Original', image)
+    cv2.imshow('Imagem Modificada', image_thickned)
 
-# Salvando a imagem sem ruído e a imagem afinada
-cv2.imwrite("temp/no_noise.jpg", image_no_noise)
-cv2.imwrite("temp/afined_image.jpg", image_thickned)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+baiacu = "images/baiacu.jpg"
+tucunare = "images/tucunare.jpg"
+tubarao = "images/tubarao.jpg"
+
+identify_image(baiacu)
+identify_image(tucunare)
+identify_image(tubarao)
